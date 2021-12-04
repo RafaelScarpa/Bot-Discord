@@ -1,7 +1,11 @@
-import discord, os, keep_alive, random
+import sys, os
+import nextcord
+import keep_alive
+import random
 
-activity=discord.Streaming(name="⭐CLIQUE AQUI!", url='https://www.youtube.com/watch?v=ldmckFxztzA')
-client=discord.Client(activity=activity)
+
+activity=nextcord.Streaming(name="⭐CLIQUE AQUI!", url='https://www.youtube.com/watch?v=ldmckFxztzA')
+client=nextcord.Client(activity=activity)
 
 keep_alive.keep_alive()
   
@@ -10,8 +14,8 @@ keep_alive.keep_alive()
 @client.event
 async def on_ready():
   print('-----')
+  print('Versão do nextcord: '+nextcord.__version__)
   print('Login como {0.user}!'.format(client))
-  print('Versão do discord.py: '+discord.__version__)
   print('-----')
 
 
@@ -24,10 +28,10 @@ async def on_message(message):
   async def enviar(Entrada):
     await message.channel.send(content=Entrada, reference=message)
   async def enviar2(Entrada):
-    await message.channel.send(embed=Entrada)
+    await message.channel.send(embed=Entrada, reference=message)
 
   #Lista de comandos.
-  LstCmds= discord.Embed(color=0x00ff90,title='Comandos:',description=(
+  LstCmds= nextcord.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"Comandos do Bot?"** (Isto.)'+
   '\n**"Hora da Live?"** (3h, sexta)'+
   '\n**"+YouTube"** (Meu canal!)'+
@@ -48,17 +52,17 @@ async def on_message(message):
 
   #Comando 1
   if "+youtube"== mensagem or"+live"==mensagem or"[btlnk]"in mensagem:
-    EMBED1=discord.Embed(title="Rafael Scarpa no YouTube",url="https://youtube.co/RafaelScarpa/live",color=0x00ff90)
-    await enviar2(EMBED1)
+    EMBED=nextcord.Embed(title="Rafael Scarpa no YouTube",url="https://youtube.co/RafaelScarpa/live",color=0x00ff90)
+    await enviar2(EMBED)
   if "+twitter"==mensagem:
-    EMBED1=discord.Embed(title="Avisos do Scarpa no Twitter",url="https://twitter.com/ScarpaYT",color=0x00ff90)
+    EMBED1=nextcord.Embed(title="Avisos do Scarpa no Twitter",url="https://twitter.com/ScarpaYT",color=0x00ff90)
     await enviar2(EMBED1)
   if "+doação"==mensagem:
-    EMBED1=discord.Embed(title="Doações?! :eyes:",url="https://streamelements.com/rafaelscarpa/tip",color=0x00ff90)
-    await enviar2(EMBED1)
+    EMBED=nextcord.Embed(title="Doações?! :eyes:",url="https://streamelements.com/rafaelscarpa/tip",color=0x00ff90)
+    await enviar2(EMBED)
   if "+links"==mensagem:
-    EMBED1=discord.Embed(title="Website secreto?! :flushed:",url="https://Bot-Discord.rafaelscarpa.repl.co",color=0x00ff90)
-    await enviar2(EMBED1)
+    EMBED=nextcord.Embed(title="Website secreto?! :flushed:",url="https://Bot-Discord.rafaelscarpa.repl.co",color=0x00ff90)
+    await enviar2(EMBED)
 
   #Comando 2
   if'live'in mensagem and'hora'in mensagem: await enviar('Normalmente, 15:00(BRT/GMT-3) na sexta.')
@@ -72,13 +76,13 @@ async def on_message(message):
 
   #Comando 4
   if mensagem.startswith('+avatar'):
-    if len(mensagem)==7:await enviar(autor.avatar_url)
+    if len(mensagem)==7:await enviar(autor.display_avatar.url)
     else:
       try:await enviar(message.mentions[0].avatar_url)
       except:await enviar('Marque um usuário ou envie "+avatar".')
 
   #Comando 5
-  if "+sobre"==mensagem:await enviar('Um dia, Scarpa imaginou um tempo após sua vida. Após ele, quem diria o horário da live?! Fui criado para servir o Scopistão e substituir Scarpa.\nPara sugerir um novo comando, vá ao canal de sugestões.')
+  if "+sobre"==mensagem:await enviar('Diretriz secundária: Servir todas as necessidades do servidor.\nDiretiz primária: Remover qualquer necessidade de bots com nomes que começam com "L".')
 
   #Comando 6
   if mensagem.startswith('+silenciar'):
@@ -122,8 +126,5 @@ async def on_message(message):
     except: await enviar(nom)
     else: await enviar("Feito, "+nom+".")
 
-  #Comando 10
-  if client.user.mentioned_in(message):
-    await enviar("salve")
 
 client.run(os.getenv('TOKEN'))
