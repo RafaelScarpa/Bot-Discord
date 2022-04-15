@@ -1,4 +1,4 @@
-[tool.poetry]
+  [tool.poetry]
 name = "bot-discord"
 version = "0.1.0"
 description = "Bot do Discord"
@@ -6,8 +6,11 @@ authors = ["Rafael Scarpa <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-flask = "^1.1.2"
+flask = "^2.0.0"
 nextcord = "^2.0.0-alpha.3"
+replit = "^3.2.4"
+pypokedex = "^1.6.0"
+cn = "^0.0.0"
 
 [tool.poetry.dev-dependencies]
 
