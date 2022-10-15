@@ -7,10 +7,10 @@ authors = ["Rafael Scarpa <you@example.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 flask = "^2.0.0"
-nextcord = "^2.0.0-alpha.3"
 replit = "^3.2.4"
 pypokedex = "^1.6.0"
-cn = "^0.0.0"
+nextcord = "^2.0.0-alpha.10"
+nextcord-ext-activities = "^2022.6.11"
 
 [tool.poetry.dev-dependencies]
 
