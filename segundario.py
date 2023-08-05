@@ -1,5 +1,7 @@
 import nextcord as nxc
 from nextcord.ext import activities as ativ
+from datetime import datetime
+inicio=datetime.now()
 
 #+comandos
 LstCmds= [nxc.Embed(color=0x00ff90,title='Comandos:',description=(
@@ -19,11 +21,13 @@ LstCmds= [nxc.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"+Pokémon":** *Um pokémon aleatório!*\n'+
   '**"+Ship":** *O poder do amor?!*\n'+
   '**"+Dado":** *Role e boa sorte!*\n'+
-  '**"+palavra":** *Vocabulárise!*'
+  '**"+Palavra":** *Vocabulárise-se!*\n'+
+  '**"+Estatistica":** *Nerd.*\n'+
+  '**"+Item":** *Loot box!*'
 
 )),nxc.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"/comandos":** *Isto*\n'+
-  '**"/rank":** *Ganhe pontos por falar!*\n'+
+  '**"/rank" e "/score":** *Ganhe pontos por falar!*\n'+
   '**"/pergunta":** *Calcule seu futuro!*\n'+
   '**"/avatar":** *Pegue a foto de alguém!*\n'+
   '**"/abraço":** *Abraçoe alguém!*\n'+
@@ -34,10 +38,11 @@ LstCmds= [nxc.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"/dado":** *Role e boa sorte!* \n'+
   '**"/aposta":** *Escolha sabiamente!*\n'+
   '**"/pagar":** *Pix.*\n'+
-  '**"/youtube":** *Assista com a call!*\n'+
-  '**"/gartic":** *Jogue Gartic falso!*\n'+
-  '**"/palavra":** *Vocabulárise-se!*'
-))]
+  '**"/palavra":** *Vocabulárise-se!*\n'+
+  '**"/estatistica":** *Nerd.*\n'+
+  '**"/tradução":** *Traduza!*\n'+
+  '**"/item" ("/comer" e "/vender"):** *Loot box!*\n'
+  ))]
 
 #+nome
 consoante=[
@@ -56,6 +61,7 @@ links=[
   nxc.Embed(title="Website secreto?! :flushed:",url="https://Bot-Discord.rafaelscarpa.repl.co",color=0x00ff90)]
 
 #+pergunta
+prgt=['O Algoritmo™ diz:\n"{}"','The Algorithm™ says:\n"{}"']
 rsp=["Nah.","Achando que não, ein.","Não sei...","Tem uma boa chance.",":+1: Sim.","Pergunte de novo.","As aparências enganam.","Este futuro não é definido."]
 
 #+abraço/tapa
@@ -64,7 +70,7 @@ frases=[[
   '/give __{0}__ hug 64',
   'Abração enviado pra __{0}__.',
   '__{1}__ usou abraço.\nFoi super efetivo!',
-  'abraço(__{1}__, __{0}__)'
+  'await abraço(__{1}__, __{0}__)'
 ],[
   '__{1}__ esbofeteou __{0}__.',
   '__{1}__ tapeou __{0}__.',
@@ -72,7 +78,7 @@ frases=[[
   '__{1}__ usou Tapa.\nUm ataque crítico!',
   '__{0}__ levou uma pra ficar esperto(a).',
   '__{1}__ atacou __{0}__.',
-  '__{1}__ tentou colar na prova de __{0}__.',
+  '__{0}__ tentou colar na prova de __{1}__.',
   '__{0}__ levou só uma de __{1}__.',
   '__{0}__ mereceu uma bicuda.',
   '__{0}__ está sendo vítma de assédio.',
@@ -103,7 +109,8 @@ gifs=[[
   'https://media4.giphy.com/media/LD8TdEcyuJxu0/giphy.gif',
   'https://media4.giphy.com/media/3ohfFOrOAW9GaczHc4/giphy.gif',
   'https://media4.giphy.com/media/Qvwc79OfQOa4g/giphy.gif',
-  'https://media4.giphy.com/media/UbzayP2FNPWbm/giphy.gif'
+  'https://media4.giphy.com/media/UbzayP2FNPWbm/giphy.gif',
+  'https://images-ext-2.discordapp.net/external/VAGZ468ujJo9lDrusKLWC43bVjLM9oieYpbM4p55m-k/https/media.tenor.com/PTONt_7DUTgAAAPo/batman-slap-robin.mp4'
 ]]
 def gif(i,n=False,u='Você',f=0): 
   a= nxc.Embed(title=f.format(n,u)) if n else nxc.Embed()
@@ -111,39 +118,34 @@ def gif(i,n=False,u='Você',f=0):
   return a
 
 #+sobre
-sobre= 'Diretriz secundária: Servir todas as necessidades do servidor.\nDiretriz primária: Remover qualquer necessidade de bots com nomes que começam com "L".\n||Diretriz 3: BOT DE MÚSICAAAA!!!!!!!!!!!! EEEEEEEEEEEEEEEEEEEEEE||'
+sobre= 'Diretriz secundária: Servir todas as necessidades do servidor.\nDiretriz primária: Remover qualquer necessidade de bots com nomes que começam com "L".'
 hora = 'Normalmente a live começa às 15:00(BRT/GMT-3) na sexta ou no sabado.'
 
 #+pokemon
 pokemon='__**#{0}: {1}**__\nTipo: *{2}*'
 
 #+rank
-def ranking(scores):
+def ranking(scores,en):
   rank=''
   for i in range(0,10):
-    rank=rank+('__{a}__ **<@!{b}>:** {c}\n').format(a=i+1,b=scores[i][1],c=scores[i][0])
-  return nxc.Embed(color=0x00ff90,title='Ranking de Score:',description=rank)
+    rank=rank+('__{a}__ **<@!{b}>:** {c}\n').format(a=i+1,b=scores[i][0],c=scores[i][1])
+  return nxc.Embed(color=0x00ff90,title=['Ranking de Score:','Score ranking:'][en],description=rank)
 
 #evento
-def eu(u): return u.id==439609946175438858
+eu= lambda u: u.id==439609946175438858
 
-cargo = [[
+cargo = [
   975549281945657396,
   979846270741016626
-]]
+]
 
 #aposta
 ppt=["🪨","📄","✂️"]
 
 #pagar
-pagar="**Transferência concluída!**\n{0}»{1}\n{2}»{3}"
+pagar=lambda en: "**"+["Transferência concluída","Transfer complete"][en]+"!**\n{0}»{1}\n{2}»{3}"
 
-#atividade
-atividade=[
-ativ.Activity.youtube,
-ativ.Activity.sketch
-]
-
+#estatistica
 def stat(n,v1,v2,v3,v4,v5):
   embed=nxc.Embed(title="Atributos:")
   embed.set_author(name=n)
@@ -154,8 +156,42 @@ def stat(n,v1,v2,v3,v4,v5):
   embed.add_field(name="Carisma", value=v5+"/21", inline=True)
   return embed
 
-#18
+#palavra
 palavras=''
-with open("palavras.txt") as p:
+with open("palavras.txt", encoding="utf8") as p:
   palavras=p.readlines()
 lenPalavras=len(palavras)
+
+#nice
+nice=["Contador de nice: {}","Nice counter: {}"]
+
+#inglês
+eng = lambda m: 1 if m.guild.get_role(832738572486049824) in m.roles else 0
+
+#inventário
+itens=[
+  ["Carrinho de mão",7,"","Wheelbarrow","",""],
+  ["Patinho de borracha",2,"Parece chiclete sem gosto.","Rubber duck","","It's like flavorless gum."],
+  ["Sorvete",5,"Sabor misto, docinho.","Ice cream", "", "Sweet swirl."],
+  ["Sorvete",4,"Sabor baunilia, docinho.","Ice cream","","A nice vanilla."],
+  ["Chá gelado",4,"Energético!","Ice tea","","Energizing!"],
+  ["Ferrocianeto férrico",1,"hmmmmmmmm fumaça", "Ferric ferrocyanide", "", "blue and smoky"],
+  ["Disco de Fortnite (Xbox One), lacrado",8,"Gosto épico de Victory Royale.", "Fortnite (Xbox One) Disc, sealed","","Epic taste of victory royale."],
+  ["PC da Xuxa",9,"???","Potato PC","","Why?"],
+  ['DVD "Barquinhos" Lacrado',11,"","Vídeo Brinquedo DVD movie, sealed","",""],
+  ["Chinelo",3,"Parece chiclete sem gosto.","Flip flops","","It's like flavorless gum."],
+  ["Caixa",1,"Acho que tinha algo dentro...","Box","","I think it wasn't empty..."],
+  ["Sanduíche",5,"","Sandwich","",""],
+  ["Nokia",8,"Gosto de dentes. ...Deve ser só seus dentes.","Nokia phone","","Tastes like teeth. ...Your teeth broke."],
+  ["Bolo",6,"Doce!","Cake","","Sweet."], ["Bolo",7,"Doce!","Cake","","Very sweet!"],
+  ["Muito queijo",8,"Nunca é muito queijo.","Too much cheese","","It's never too much cheese."],
+  ["Queijo",7,"","Cheese","",""],
+  ["MasterCard",0,"Não tem preço.","MasterCard","","Priceless"],
+  ["Sanduiche de frango",3,"","Chicken sandwich","",""],
+  ["Sanduiche de frango deluxe picante",5,"","Deluxe spicy chicken sandwich","",""],
+  ["Batata Frita",2,"Salgado.","Fries","","Salty."],
+  ["Tijolo",1,"Um gosto concreto.","Brick","","Concrete taste."],
+  ["Boneco de ação 'My World'",4,"Plástico.","Knock-off action figure","","Plastic."],
+  ["Cadeira de plástico",4,"Foi bem grande.","Plastic chair","","That was big."],
+  ["Ovo", 5, "Crocante.","Egg","","Crunchy."]
+]
