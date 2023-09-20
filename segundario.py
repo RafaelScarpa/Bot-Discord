@@ -23,7 +23,11 @@ LstCmds= [nxc.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"+Dado":** *Role e boa sorte!*\n'+
   '**"+Palavra":** *Vocabulárise-se!*\n'+
   '**"+Estatistica":** *Nerd.*\n'+
-  '**"+Item":** *Loot box!*'
+  '**"+Item" ("+comer" e "+vender"):** *Loot box!*\n'+
+  '**"+Wiki":** *Informações imediatamente!*\n'+
+  '**"+Spotify":** *Qual sua música favorita?*\n'+
+  '**"+Serverinfo":** *Me de um link, te dou info.*\n'+
+  '**"+Que anime":** *Ele vai descobrir...*'
 
 )),nxc.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"/comandos":** *Isto*\n'+
@@ -41,17 +45,22 @@ LstCmds= [nxc.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"/palavra":** *Vocabulárise-se!*\n'+
   '**"/estatistica":** *Nerd.*\n'+
   '**"/tradução":** *Traduza!*\n'+
-  '**"/item" ("/comer" e "/vender"):** *Loot box!*\n'
+  '**"/item" ("/comer" e "/vender"):** *Loot box!*\n'+
+  '**"/wiki":** *Informações imediatamente!*\n'+
+  '**"/spotify":** *Qual sua música favorita?*\n'+
+  '**"/serverinfo":** *Me de um link, te dou info.*'
   ))]
 
 #+nome
 consoante=[
-'','','b','b','b','c','c','c','d','d','d','f','f','f','g','g','g','j','j','j','l','l''l','m','m','m','n','n','n','p','p','p','r','r','r','t','t','t','v','v','v','z','z','z',
-'h','s','br','cr','fr','gr','pr','tr','vr','bl','cl','fl','gl','pl','tl','gu','qu','ch','ss','ç','x']
+'','','b','b','b','c','c','c','d','d','d','f','f','f','g','g','g','j','j','j','l','l''l','m','m','m','n','n','n','p','p','p','r','r','r','s','s','t','t','t','v','v','v','z','z','z',
+'br','cr','fr','gr','pr','tr','vr','bl','cl','fl','gl','pl','tl','gu','qu','ch','ss',
+'h','ç','x','ch','k','w','wh','sh','kr']
 vogal=['a','a','a','a','e','e','e','e','i','i','i','i','o','o','o','o',
-'ai','ei','ão','ã',
+'ai','ei','ão','ã','y',
 'u','u','u','u']
-fim=['','','','','','','r','l','s','n']
+fim=['','','','','','','r','l','s','n',
+'v','k','c','ng','t','w']
 
 #Comandos genéricos de links.
 links=[
@@ -66,25 +75,26 @@ rsp=["Nah.","Achando que não, ein.","Não sei...","Tem uma boa chance.",":+1: S
 
 #+abraço/tapa
 frases=[[
-  'Abraço dado para __{0}__.',
-  '/give __{0}__ hug 64',
-  'Abração enviado pra __{0}__.',
-  '__{1}__ usou abraço.\nFoi super efetivo!',
-  'await abraço(__{1}__, __{0}__)'
+  ['Abraço dado para __{0}__.','Hug given to ___{0}__]'],
+  ['/give __{0}__ hug 64','/give __{0}__ hug 64'],
+  ['Abração enviado pra __{0}__.','Big hug sent to __{0}__.'],
+  ['__{1}__ usou abraço.\nFoi super efetivo!','__{1}__ used hug.\nIt was super effective!'],
+  ['`await abraço(__{1}__, __{0}__)`','`await hug(__{1}__, __{0}__)`'],
 ],[
-  '__{1}__ esbofeteou __{0}__.',
-  '__{1}__ tapeou __{0}__.',
-  '__{1}__ bateu em __{0}__.',
-  '__{1}__ usou Tapa.\nUm ataque crítico!',
-  '__{0}__ levou uma pra ficar esperto(a).',
-  '__{1}__ atacou __{0}__.',
-  '__{0}__ tentou colar na prova de __{1}__.',
-  '__{0}__ levou só uma de __{1}__.',
-  '__{0}__ mereceu uma bicuda.',
-  '__{0}__ está sendo vítma de assédio.',
-  '__{1}__ agrediu __{0}__.',
-  '__{0}__ e __{1}__ entram em conflito.',
-  '__{1}__ assou __{0}__ na porrada.'
+  ['__{1}__ esbofeteou __{0}__.','__{1}__ hit __{0}__.'],
+  ['__{1}__ tapeou __{0}__.','__{1}__ slapped __{0}__.'],
+  ['__{1}__ bateu em __{0}__.','__{1}__ beat up __{0}__.'],
+  ['__{1}__ usou Tapa.\nUm ataque crítico!','__{1}__ used slap.\nA critical hit!'],
+  ['__{0}__ levou uma pra ficar esperto(a).','__{0}__ got a wake up call.'],
+  ['__{1}__ atacou __{0}__.','__{1}__ attacked __{0}__.'],
+  ['__{0}__ tentou colar na prova de __{1}__.','__{1}__ feels __{0}__ cheated on them.'],
+  ['__{0}__ levou só uma de __{1}__.','__{0}__ just took one from __{1}__.'],
+  ['__{0}__ mereceu uma bicuda.','__{0}__ deserved it.'],
+  ['__{0}__ está sendo vítma de assédio.','__{0}__ becomes a victim of harassment.'],
+  ['__{1}__ agrediu __{0}__.','__{1}__ hurt __{0}__.'],
+  ['__{0}__ e __{1}__ entram em conflito.','__{0}__ and __{1}__ are in conflict.'],
+  ['__{1}__ assou __{0}__ na porrada.','__{1}__ absolutely destroyed {0}.'],
+  ['__{1}__ espancou __{0}__.','__{1}__ kicked {0} with bare hands.']
 ]]
 gifs=[[
   'https://media4.giphy.com/media/l4FGy5UyZ1KnVZ7BC/giphy.gif',
@@ -100,7 +110,7 @@ gifs=[[
 ],[
   'https://c.tenor.com/feYx-Pe4s4AAAAAM/tapa-2345.gif',
   'https://c.tenor.com/G615xUCziBoAAAAC/globo-tapa.gif',
-  'https://storage.googleapis.com/gazetabrasil.com.br/2022/03/ab4b2052-0b916b0472aa2e3421c581fc40e4e2b7.gif',
+  'https://media.tenor.com/ED4tqjm3jcAAAAAC/will-smith-oscars.gif',
   'https://media4.giphy.com/media/uG3lKkAuh53wc/giphy.gif',
   'https://media4.giphy.com/media/Gf3AUz3eBNbTW/giphy.gif',
   'https://media4.giphy.com/media/13dRJkj5wgKq9q/giphy.gif',
@@ -110,7 +120,7 @@ gifs=[[
   'https://media4.giphy.com/media/3ohfFOrOAW9GaczHc4/giphy.gif',
   'https://media4.giphy.com/media/Qvwc79OfQOa4g/giphy.gif',
   'https://media4.giphy.com/media/UbzayP2FNPWbm/giphy.gif',
-  'https://images-ext-2.discordapp.net/external/VAGZ468ujJo9lDrusKLWC43bVjLM9oieYpbM4p55m-k/https/media.tenor.com/PTONt_7DUTgAAAPo/batman-slap-robin.mp4'
+  'https://i.imgflip.com/4qxugy.gif'
 ]]
 def gif(i,n=False,u='Você',f=0): 
   a= nxc.Embed(title=f.format(n,u)) if n else nxc.Embed()
@@ -170,14 +180,14 @@ eng = lambda m: 1 if m.guild.get_role(832738572486049824) in m.roles else 0
 
 #inventário
 itens=[
-  ["Carrinho de mão",7,"","Wheelbarrow","",""],
+  ["Carrinho de mão",7,"Rico em ferro!","Wheelbarrow","","Rich in iron!"],
   ["Patinho de borracha",2,"Parece chiclete sem gosto.","Rubber duck","","It's like flavorless gum."],
   ["Sorvete",5,"Sabor misto, docinho.","Ice cream", "", "Sweet swirl."],
   ["Sorvete",4,"Sabor baunilia, docinho.","Ice cream","","A nice vanilla."],
   ["Chá gelado",4,"Energético!","Ice tea","","Energizing!"],
   ["Ferrocianeto férrico",1,"hmmmmmmmm fumaça", "Ferric ferrocyanide", "", "blue and smoky"],
   ["Disco de Fortnite (Xbox One), lacrado",8,"Gosto épico de Victory Royale.", "Fortnite (Xbox One) Disc, sealed","","Epic taste of victory royale."],
-  ["PC da Xuxa",9,"???","Potato PC","","Why?"],
+  ["PC da Xuxa",9,"???","Potato PC","","Tastes like chips."],
   ['DVD "Barquinhos" Lacrado',11,"","Vídeo Brinquedo DVD movie, sealed","",""],
   ["Chinelo",3,"Parece chiclete sem gosto.","Flip flops","","It's like flavorless gum."],
   ["Caixa",1,"Acho que tinha algo dentro...","Box","","I think it wasn't empty..."],
@@ -193,5 +203,6 @@ itens=[
   ["Tijolo",1,"Um gosto concreto.","Brick","","Concrete taste."],
   ["Boneco de ação 'My World'",4,"Plástico.","Knock-off action figure","","Plastic."],
   ["Cadeira de plástico",4,"Foi bem grande.","Plastic chair","","That was big."],
-  ["Ovo", 5, "Crocante.","Egg","","Crunchy."]
+  ["Ovo", 5, "Crocante.","Egg","","Crunchy."],
+  ["Prato platônico",3,"Porém pra simplificar a apresentação no plural é sempre completamente aplicável e prático, pular uma pura placa pluvial de plástico.","Platonic plate","",'"Plate-o" lol /p']
 ]

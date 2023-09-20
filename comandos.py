@@ -52,6 +52,7 @@ async def simples(mensagem:str,enviar,enviarE,msg): #Comandos que se verificam a
     if '+doação'==mensagem: await enviarE(seg.links[2])
     if '+links'==mensagem: await enviarE(seg.links[3])
     if "+sobre"==mensagem: await enviar(seg.sobre)
+    if "+queanime"==mensagem: await enviar("<@!594211566581186646> que anime é esse?")
     if mensagem.startswith('+pergunta'): await enviar(seg.prgt[seg.eng(msg.author)].format(random.choice(seg.rsp)))
 
 #2
@@ -99,8 +100,7 @@ async def nome(autor=None,enviar=None,sub:bool=False):
   if nom.startswith('ç'): nom=random.choice(['c','s'])+nom[1:]
   nom= nom.replace('nb','mb').replace('np','mp')
   nom= nom.replace('nn','n').replace('nm','m')
-  nom= nom.replace('çi','si').replace('çe','se')
-  nom= nom.replace('ll','l').replace('sss','ss')
+  nom= nom.replace('çe','se').replace('sss','ss')
   nom=nom.capitalize()
   if not sub:
     try:await autor.edit(nick=nom,reason="+nome")
@@ -112,11 +112,11 @@ async def nome(autor=None,enviar=None,sub:bool=False):
     return nom
 
 #6
-async def gif(i,menciona,enviar,autor):
+async def gif(i:int,menciona,enviar,autor):
     try: nick=menciona[0].nick
     except:nick=False
     await enviar(
-      seg.gif(random.choice(seg.gifs[i]), nick, autor.display_name, random.choice(seg.frases[i]))
+      seg.gif(random.choice(seg.gifs[i]), nick, autor.display_name, random.choice(seg.frases[i])[seg.eng(autor)])
     )
 
 #7
@@ -280,6 +280,22 @@ async def música(enviar,mensagem:str):
   link=spotify.pesquisar(mensagem.removeprefix("+spotify").strip())
   await enviar(link)
 
+#23
+async def serverinfo(enviar,link:str,client):
+  convite=await client.fetch_invite(link)
+  if convite.expires_at==None:
+    content="Não há data de vencimento para este convite.\n"
+  else:
+    content="Vencimento do convite: {0}\n".format(convite.expires_at.strftime("%d/%m/%Y às %H:%M:%S"))
+  content+="Canal associado ao convite\n- Nome: `{0}` ({1})\n- Data de criação: {2}\n".format(convite.channel.name, convite.channel.mention, convite.channel.created_at.strftime("%d/%m/%Y às %H:%M:%S"))
+  servidor=convite.guild
+  if servidor==None:
+    content+="Não há servidor associado a este convite."
+  else:
+    content+="Servidor\n- Nome: `{0}` (id {1})\n- Descrição: `{2}`\n- Criado: {3}.".format(servidor.name,servidor.id,servidor.description,servidor.created_at.strftime("%d/%m/%Y às %H:%M:%S"))
+    content+="\n- Icone: {0}\n- Banner 1: {1}\n- Banner 2: {2}".format(str(servidor.icon),str(servidor.banner),str(servidor.splash))
+  await enviar(content)
+
 
 
 async def processar(msg,mensagem,autor,menciona,enviar,enviarE,client):
@@ -361,16 +377,16 @@ def barra(client):
   ) #6a
   async def b06a(interage, m:nxc.Member):
     async def enviarEB(embed):
-      await interage.send(embed=embed ,content=m.mention)
-    await gif(0,[m],enviarEB, interage.user,seg.eng(interage.user))
+      await interage.send(embed=embed)
+    await gif(0,[m],enviarEB,interage.user)
   
   @client.slash_command(name="tapa", description="Agressão?",
     name_localizations=dict.fromkeys(['en-US',"en-GB"],'slap'),description_localizations=dict.fromkeys(['en-US',"en-GB"],'Aggression?')
   ) #6b
   async def b06b(interage, m:nxc.Member):
     async def enviarEB(embed):
-      await interage.send(embed=embed ,content=m.mention)
-    await gif(1,[m],enviarEB, interage.user)
+      await interage.send(embed=embed)
+    await gif(1,[m],enviarEB,interage.user)
 
   @client.slash_command(name="score", description="Veja seus pontos!",
     description_localizations=dict.fromkeys(['en-US',"en-GB"],'Check your score!')
@@ -509,7 +525,12 @@ def barra(client):
   async def b22(interage, q:str):
     link=spotify.pesquisar(q)
     await interage.send(link)
-  
+
+  @client.slash_command(name="serverinfo", description="Busque conhecimento!",
+    description_localizations=dict.fromkeys(['en-US','en-GB'],"Get a server's information!")) #23
+  async def b23(interage, convite:str=Opção(required=True,name_localizations=dict.fromkeys(['en-US','en-GB'],"invite"))):
+    await serverinfo(interage.send,convite,client)
+
 
   @client.message_command(name="Tranduzir para o português.") #18a (mensagem)
   async def m18a(interage:nxc.Interaction, contexto:nxc.message):
