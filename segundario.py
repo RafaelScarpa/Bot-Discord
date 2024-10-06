@@ -1,16 +1,17 @@
+import functools
 import nextcord as nxc
 from nextcord.ext import activities as ativ
 from datetime import datetime
 inicio=datetime.now()
 
 #+comandos
-LstCmds= [nxc.Embed(color=0x00ff90,title='Comandos:',description=(
+def listaComandos(tipo,en):
+  listas=[
+  [
   '**"Comandos do Bot?":** *Isto.*\n'+
-  '**"Hora da Live?":** *3h, sexta.*\n'+
   '**"+YouTube":** *Meu canal!*\n'+ 
   '**"+Sobre":** *Info do bot!*\n'+
-  '**"+Live":** *Assista a live!*\n'+
-  '**"+Score:"/"+Rank"** *Ganhe pontos por falar!*\n'+
+  '**"+Score:" e "+Rank"** *Ganhe pontos por falar!*\n'+
   '**"+Pergunta"** *Calcule seu futuro!*\n'+
   '**"+Doação":** *Me dê dinheiro que não mereço!*\n'+
   '**"+Avatar":** *Pegue a foto de alguém!*\n'+
@@ -23,13 +24,32 @@ LstCmds= [nxc.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"+Dado":** *Role e boa sorte!*\n'+
   '**"+Palavra":** *Vocabulárise-se!*\n'+
   '**"+Estatistica":** *Nerd.*\n'+
-  '**"+Item" ("+comer" e "+vender"):** *Loot box!*\n'+
-  '**"+Wiki":** *Informações imediatamente!*\n'+
+  '**"+Item" ("+Comer" e "+Vender"):** *Loot box!*\n'+
+#  '**"+Wiki":** *Informações imediatamente!*\n'+
   '**"+Spotify":** *Qual sua música favorita?*\n'+
   '**"+Serverinfo":** *Me de um link, te dou info.*\n'+
-  '**"+Que anime":** *Ele vai descobrir...*'
-
-)),nxc.Embed(color=0x00ff90,title='Comandos:',description=(
+  '**"+Queanime":** *Ele vai descobrir...*'
+  ,
+  '**"+Help":** *This.*\n'+
+  '**"+YouTube":** *My channel!*\n'+ 
+  '**"+Score:" and "+Rank"** *Get points for talking!*\n'+
+  '**"+Doação":** *I do not deserve others\' money!*\n'+
+  '**"+PFP":** *Get someone\'s picture!*\n'+
+  '**"+Hug":** *Hug someone!*\n'+
+  '**"+Slap":** *That\'s what you get!*\n'+
+  '**"+Name":** *A new brand new name for you!*\n'+
+  '**"+Clear":** *Removes 30 messages. (Mods only.)*\n'+
+  '**"+Pokémon":** *A random pokémon!*\n'+
+  '**"+Ship":** *The power of love?!*\n'+
+  '**"+Dice":** *Roll and good luck!*\n'+
+  '**"+Palavra":** *Learn Portuguese!*\n'+
+  '**"+Stats":** *You nerd.*\n'+
+  '**"+Item" ("+Eat" and "+Sell"):** *Loot boxes!*\n'+
+#  '**"+Wiki":** *Immediate information!*\n'+
+  '**"+Spotify":** *What\'s your favorite song?*\n'+
+  '**"+Serverinfo":** *Give me a link, I give you info.*\n'+
+  '**"+Queanime":** *He\'ll find out what anime this is...*'
+  ],[
   '**"/comandos":** *Isto*\n'+
   '**"/rank" e "/score":** *Ganhe pontos por falar!*\n'+
   '**"/pergunta":** *Calcule seu futuro!*\n'+
@@ -40,16 +60,37 @@ LstCmds= [nxc.Embed(color=0x00ff90,title='Comandos:',description=(
   '**"/pokémon":** *Um pokémon aleatório!*\n'+
   '**"/ship":** *O poder do amor?!*\n'+
   '**"/dado":** *Role e boa sorte!* \n'+
-  '**"/aposta":** *Escolha sabiamente!*\n'+
+#  '**"/duelo":** *Batalhe! Ganhe?*'+
   '**"/pagar":** *Pix.*\n'+
   '**"/palavra":** *Vocabulárise-se!*\n'+
   '**"/estatistica":** *Nerd.*\n'+
   '**"/tradução":** *Traduza!*\n'+
   '**"/item" ("/comer" e "/vender"):** *Loot box!*\n'+
-  '**"/wiki":** *Informações imediatamente!*\n'+
+#  '**"/wiki":** *Informações imediatamente!*\n'+
   '**"/spotify":** *Qual sua música favorita?*\n'+
   '**"/serverinfo":** *Me de um link, te dou info.*'
-  ))]
+  ,
+  '**"/commands":** *This.*\n'+
+  '**"/score:" and "/rank"** *Get points for talking!*\n'+
+  '**"/avatar":** *Pegue a foto de alguém!*\n'+
+  '**"/hug":** *Hug someone!*\n'+
+  '**"/slap":** *That\'s what you get!*\n'+
+  '**"/name":** *A new brand new name for you!*\n'+
+  '**"/pokemon":** *A random pokémon!*\n'+
+  '**"/ship":** *The power of love?!*\n'+
+  '**"/dice":** *Roll and good luck!*\n'+
+#  '**"/duel":** *Fight! Win?*'+
+  '**"/pay":** *Wire transfer score.*\n'+
+  '**"/palavra":** *Learn Portuguese!*\n'+
+  '**"/stats":** *You nerd.*\n'+
+  '**"/translate":** *Translate!*\n'+
+  '**"/item" ("/comer" e "/vender"):** *Loot box!*\n'+
+#  '**"/wiki":** *Immediate information!*\n'+
+  '**"/spotify":** *What\'s your favorite song?*\n'+
+  '**"/serverinfo":** *Give me a link, I give you info.*\n'
+  ]
+  ]
+  return nxc.Embed(color=0x00ff90,title='Comandos:',description=listas[tipo][en])
 
 #+nome
 consoante=[
@@ -65,9 +106,8 @@ fim=['','','','','','','r','l','s','n',
 #Comandos genéricos de links.
 links=[
   nxc.Embed(title="Rafael Scarpa no YouTube",url="https://youtube.co/RafaelScarpa/live",color=0x00ff90),
-  nxc.Embed(title="Avisos do Scarpa no Twitter",url="https://twitter.com/ScarpaYT",color=0x00ff90),
-  nxc.Embed(title="Doações?! :eyes:",url="https://streamelements.com/rafaelscarpa/tip",color=0x00ff90),
-  nxc.Embed(title="Website secreto?! :flushed:",url="https://Bot-Discord.rafaelscarpa.repl.co",color=0x00ff90)]
+  nxc.Embed(title="Em pausa. Tente 1.1.1.1?",url="https://1.1.1.1",color=0x00ff90),
+  nxc.Embed(title="Doações?! :eyes:",url="https://streamelements.com/rafaelscarpa/tip",color=0x00ff90)]
 
 #+pergunta
 prgt=['O Algoritmo™ diz:\n"{}"','The Algorithm™ says:\n"{}"']
@@ -138,22 +178,19 @@ pokemon='__**#{0}: {1}**__\nTipo: *{2}*'
 def ranking(scores,en):
   rank=''
   for i in range(0,10):
-    rank=rank+('__{a}__ **<@!{b}>:** {c}\n').format(a=i+1,b=scores[i][0],c=scores[i][1])
+    rank+=('__{a}__ **<@!{b}>:** {c}\n').format(a=i+1,b=scores[i][0],c=scores[i][1])
   return nxc.Embed(color=0x00ff90,title=['Ranking de Score:','Score ranking:'][en],description=rank)
 
 #evento
-eu= lambda u: u.id==439609946175438858
+def eu(u): return u.id==439609946175438858
 
 cargo = [
   975549281945657396,
   979846270741016626
 ]
 
-#aposta
-ppt=["🪨","📄","✂️"]
-
 #pagar
-pagar=lambda en: "**"+["Transferência concluída","Transfer complete"][en]+"!**\n{0}»{1}\n{2}»{3}"
+pagar=["**Transferência concluída!**\n{0}»{1}\n{2}»{3}","**Transfer complete!**\n{0}»{1}\n{2}»{3}"]
 
 #estatistica
 def stat(n,v1,v2,v3,v4,v5):
@@ -175,8 +212,18 @@ lenPalavras=len(palavras)
 #nice
 nice=["Contador de nice: {}","Nice counter: {}"]
 
+#natal
+natal=["Contador de natal: {}","Christmas counter: {}"]
+
 #inglês
-eng = lambda m: 1 if m.guild.get_role(832738572486049824) in m.roles else 0
+@functools.cache
+def eng(m): return m.guild.get_role(832738572486049824) in m.roles
+
+#noite
+noite=[
+  ["Sleep","Night","Evening","Rest","Eep"],
+  ["well","nice","good","great","stellar","fantasic"]
+]
 
 #inventário
 itens=[
@@ -203,6 +250,7 @@ itens=[
   ["Tijolo",1,"Um gosto concreto.","Brick","","Concrete taste."],
   ["Boneco de ação 'My World'",4,"Plástico.","Knock-off action figure","","Plastic."],
   ["Cadeira de plástico",4,"Foi bem grande.","Plastic chair","","That was big."],
-  ["Ovo", 5, "Crocante.","Egg","","Crunchy."],
-  ["Prato platônico",3,"Porém pra simplificar a apresentação no plural é sempre completamente aplicável e prático, pular uma pura placa pluvial de plástico.","Platonic plate","",'"Plate-o" lol /p']
+  ["Ovo",5,"Crocante.","Egg","","Crunchy."],
+  ["Prato platônico",3,"Porém pra simplificar a apresentação no plural é sempre completamente aplicável e prático, pular uma pura placa pluvial de plástico.","Platonic plate","",'"Plate-o" lol /p'],
+  ["Banana",2,r"\*som hilário de escorregar em algo\*","Banana","","potassium"]
 ]

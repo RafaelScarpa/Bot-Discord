@@ -7,6 +7,8 @@ Program for "shipping" two Discord users.
 version 1B.0.1
 """
 
+"""File slightly altered for language options 2024-10-05"""
+
 # When each bit is compared, either there will be two 0s, a 0 and a 1, or two 1s.
 # Tweak these to adjust how these are weighted when computing compatability.
 # Adjust values until you are happy with the Min, Max, and Mean computed from the sample data.
@@ -88,13 +90,13 @@ def ship_names(name_dom:str, name_sub:str) -> str:
     return name_dom[:len(name_dom)//2] + name_sub[len(name_sub)//2:]
 
 
-def ship(name1:str, discord_id_1:int, name2:str, discord_id_2:int) -> str:
+def ship(name1:str, discord_id_1:int, name2:str, discord_id_2:int, english:bool=False) -> str:
     compatability = snowflake_compatability(discord_id_1, discord_id_2)
-    string = f"O nível de amor é {compatability:.0%}."
+    string = ["O nível de amor é ","Estimated love level is "][english] + f"{compatability:.0%}."
     if (compatability > SHIP_THRESHOLD):
         string += f" \"{ship_names(name1, name2)}\"?!"
     elif (compatability < SHIP_NO_THRESHOLD):
-        string += " Oh não..."
+        string += [" Oh não..."," Oh no..."][english]
     return string
 
 

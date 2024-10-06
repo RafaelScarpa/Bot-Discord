@@ -2,34 +2,32 @@ print('-----')
 import os
 import nextcord as nxc
 from dotenv import load_dotenv
+from comandos import processar,barra
+from logs import inicializarLog, registrar
+
+
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 intents = nxc.Intents.all()
 intents.messages = True
-from comandos import processar,barra
-from logs import inicializarLog, registrar
-
 client=nxc.Client(intents=intents,default_guild_ids=[472197062554026004])
 
-#Só pra avisar que tudo deu certo.
+
 @client.event
 async def on_ready():
-  print('Versão do nextcord: '+nxc.__version__)
-  print('Login como {0.user}!'.format(client))
   await inicializarLog(client)
+  #Avisar que tudo deu certo.
+  print('Versão do nextcord: '+nxc.__version__)
+  print(f'Login como {client.user}!')
   print('-----')
+
 
 @client.event
 async def on_message(msg):
   #Impedir loops infinitos e ignorar mensagens.
   if msg.author.bot or"[ign]"in msg.content: return
 
-  #Variáveis relevantes.
-  mensagem,autor,menciona= msg.content.lower().strip(),msg.author,msg.mentions
-  async def enviar(Entrada): await msg.reply(content=Entrada)
-  async def enviarE(embed,content=""): await msg.channel.send(embed=embed,reference=msg,content=content)
-
-  await processar(msg,mensagem,autor,menciona,enviar,enviarE,client)
+  await processar(msg=msg, mensagem=msg.content.lower().strip(), autor=msg.author, menciona=msg.mentions, enviar=msg.reply, client=client)
 
 #Boas vindas
 @client.event
@@ -42,10 +40,8 @@ async def on_member_join(membro):
 #log
 @client.event
 async def on_message_delete(msg):
-  if msg.author.bot:
-    return
-  else:
-    await registrar(msg,0)
+  if msg.author.bot: return
+  await registrar(msg,0)
 @client.event
 async def on_message_edit(msg0,msg1=None):
   if msg0.author.bot:
@@ -53,6 +49,12 @@ async def on_message_edit(msg0,msg1=None):
   else:
     await registrar(msg0,1)
 
+#@client.event
+#async def on_reaction(reação,usuário):
+#  pass
+
 barra(client)
+
+
 
 client.run(TOKEN)
