@@ -172,7 +172,12 @@ sobre= 'Diretriz secundária: Servir todas as necessidades do servidor.\nDiretri
 hora = 'Normalmente a live começa às 15:00(BRT/GMT-3) na sexta ou no sabado.'
 
 #+pokemon
-pokemon='__**#{0}: {1}**__\nTipo: *{2}*'
+@functools.cache
+def pokemon(en,numero,nome,tipo):
+  embed = nxc.Embed(title=nome,description=["Tipo: ","Type: "][en]+tipo)
+  embed.set_author(name="#"+str(numero))
+  embed.set_image(url=f"https://img.pokemondb.net/artwork/{nome.lower()}.jpg")
+  return embed
 
 #+rank
 def ranking(scores,en):

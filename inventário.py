@@ -63,7 +63,7 @@ def vender(id_,i,en):
   item=[]
   with open("itens.pkl", "rb") as f:
     dicionário=pickle.load(f)
-    if id_ not in dicionário or i >= len(dicionário[id_])  or i <= 0:
+    if id_ not in dicionário or i >= len(dicionário[id_])  or i < 0:
       return ["Item especificado não existe.","Specified item out of bounds."][en]
     item=dicionário[id_].pop(i)
   with open("itens.pkl","wb") as f:

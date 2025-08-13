@@ -2,7 +2,7 @@ print('-----')
 import os
 import nextcord as nxc
 from dotenv import load_dotenv
-from comandos import processar,barra
+from comandos import processar,barra,agora
 from logs import inicializarLog, registrar
 
 
@@ -17,6 +17,7 @@ client=nxc.Client(intents=intents,default_guild_ids=[472197062554026004])
 async def on_ready():
   await inicializarLog(client)
   #Avisar que tudo deu certo.
+  agora()
   print('Versão do nextcord: '+nxc.__version__)
   print(f'Login como {client.user}!')
   print('-----')

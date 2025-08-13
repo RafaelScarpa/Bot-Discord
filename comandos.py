@@ -17,7 +17,7 @@ from inventário import inv as Inventário
 random.seed(time())
 delay={}
 #ts.preaccelerate_and_speedtest(timeout=21.0)
-print(dt.now().strftime("%d/%m/%Y %H:%M:%S"))
+def agora(): print(dt.now().strftime("%d/%m/%Y %H:%M:%S"))
 
 
 
@@ -184,11 +184,13 @@ async def reações(msg,client,emoji):
   await msg.add_reaction(reação)
 
 #9
-async def pokemon(enviar,numero:int=""):
+async def pokemon(enviar,autor,numero:int=""):
+  en=seg.eng(autor)
   if numero=="" or numero not in range(1,1008):
     numero = random.randint(1,1008)
-  p = poke.get(dex=numero)
-  await enviar(seg.pokemon.format(numero,p.name.title(),', '.join(p.types)))
+  p=poke.get(dex=numero)
+  nome=p.name.title()
+  await enviar(embed=seg.pokemon(en,numero,nome.title(),', '.join(p.types)))
 
 #10
 async def ship(menções,autor,enviar):
@@ -372,7 +374,7 @@ async def serverinfo(enviar,link:str,client):
 
 #24 (incompleto)
 async def nitro(msg,enviar,client):
-  emoji=...
+  emoji=None
   #se possivel e for uma resposta, pegar mensagem original
   mensagens=[msg]
   if msg.reference and type(msg.reference.resolved)==nxc.Message:
@@ -447,7 +449,7 @@ async def processar(msg,mensagem,autor,menciona,enviar,client):
 
       case '+limpar'|'+clear': await limpar(autor,msg,enviar) #2
       case '+nome'|'+name': await nome(autor,enviar) #5
-      case '+pokemon'|'+pokémon': await pokemon(enviar) #9
+      case '+pokemon'|'+pokémon': await pokemon(enviar,autor) #9
       case '+rank'|'+ranking': await rank(enviar,msg,autor) #11
       case "+evento"|"+event": #12
         if seg.eu(autor): await evento(msg.guild)
@@ -464,7 +466,7 @@ async def processar(msg,mensagem,autor,menciona,enviar,client):
     if mensagem.startswith(('+abraço','+hug')): await gif(0,menciona,enviar,autor) #6a
     if mensagem.startswith(('+tapa','+slap')): await gif(1,menciona,enviar,autor) #6b
     if mensagem.startswith(('+score','+pontos')): await pontos(mensagem,autor,menciona,enviar) #7
-    if mensagem.startswith('+ship'): await ship(menciona,enviar) #10
+    if mensagem.startswith('+ship'): await ship(menciona,autor,enviar) #10
     if mensagem.startswith(("+dado","+die","+dice")): await dado(enviar,quantidade=1,mensagem=mensagem,autor=autor) #13
     if mensagem.startswith(("+comer","+eat")): await itens(enviar,autor,ação=1,mensagem=mensagem) #20b
     if mensagem.startswith(("+vender","+sell")): await itens(enviar,autor,ação=2,mensagem=mensagem) #20c
@@ -482,7 +484,7 @@ async def processar(msg,mensagem,autor,menciona,enviar,client):
     await enviar(["O prefixo certo é `+`.","The right prefix is `+`."][seg.eng(autor)])
 
   if'nice'in mensagem: await nice(mensagem,enviar,autor) #4
-  if'loritta'in mensagem or'lorita'in mensagem: await reações(msg,client,776145108689092639) #8a
+  if any(X in mensagem for X in['lorita','loritta','mee6','dyno','meesix','carlbot']): await reações(msg,client,776145108689092639) #8a
   if ' eep'in mensagem or mensagem.startswith('eep'): await reações(msg,client,str("\N{SLEEPING FACE}")) #8b
   if 'hmm' in mensagem: await reações(msg,client,str("\N{THINKING FACE}")) #8c
   if "music.youtube.com/" in mensagem: await youtubemusic(msg,enviar) #19
@@ -558,11 +560,11 @@ def barra(client):
   async def b09(interage, id_:int=
     Opção(required=False,default="")
   ):
-    await pokemon(interage.send,id_)
+    await pokemon(interage.send,interage.user,id_)
 
   @client.slash_command(name="ship", description="😳") #10
   async def b10(interage,m1:nxc.Member,m2:nxc.Member):
-    await ship([m1,m2],interage.send)
+    await ship([m1,m2],interage.user,interage.send)
 
   @client.slash_command(name="rank", description="Os tagarelas!",
     description_localizations=dict.fromkeys(['en-US',"en-GB"],'Who yapped most?')
@@ -710,8 +712,19 @@ def barra(client):
 #    await wiki(interage.send,n,l)
 
   @client.slash_command(name="spotify", description="🎵🎶") #22
-  async def b22(interage, q:str):
-    link=spotify.pesquisar(q)
+  async def b22(
+    interage,
+    nome:str=Opção(name_localizations=dict.fromkeys(['en-US','en-GB'],"name")),
+    tipo=Opção(
+      required=True,
+      choices={"Música":"track","Álbum":"album"},
+      #default="track",
+      name_localizations=dict.fromkeys(['en-US','en-GB'],"type"),
+      choice_localizations=dict.fromkeys({'Música':dict.fromkeys(['en-US','en-GB'],"Track"),'Álbum':dict.fromkeys(['en-US','en-GB'],"Album")}),
+    ),
+    artista:str=Opção(name_localizations=dict.fromkeys(['en-US','en-GB'],"artist"),required=False,default="")
+  ):
+    link=spotify.pesquisar(nome,artista,tipo)
     await interage.send(link)
 
   @client.slash_command(name="serverinfo", description="Busque conhecimento!",
